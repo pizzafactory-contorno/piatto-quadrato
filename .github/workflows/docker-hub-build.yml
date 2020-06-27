@@ -23,7 +23,7 @@ jobs:
       env:
         POST_TRIGGER_URL: ${{ secrets.DOCKERHUB_TRIGGER_URL }}
       run: |
-        curl -H "Content-Type: application/json" --data '{"build": true}' -X $DOCKERHUB_TRIGGER_URL
+        curl -H "Content-Type: application/json" --data '{"build": true}' -XPOST $DOCKERHUB_TRIGGER_URL
 
     - name: Notify to Google Chat
       uses: Co-qn/google-chat-notification@releases/v1
