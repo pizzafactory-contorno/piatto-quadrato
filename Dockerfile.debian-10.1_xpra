@@ -7,9 +7,9 @@ RUN apt-get update && apt-get upgrade -y && \
     curl https://xpra.org/repos/buster/xpra.list > /etc/apt/sources.list.d/xpra.list && \
     curl https://xpra.org/gpg.asc | apt-key add - && \
     apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y python3-xpra websockify xpra xpra-html5 xvfb && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y websockify xpra xpra-html5 xvfb && \
     apt-get autoremove -y curl gnupg && \
-    rm -fr /var/lib/apt/lists/*
+    apt-get clean && rm -fr /var/lib/apt/lists/*
 COPY ./start-xpra.sh /start-xpra.sh
 USER user
 
