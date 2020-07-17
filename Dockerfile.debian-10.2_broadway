@@ -4,6 +4,7 @@ LABEL maintainer="Masaki Muranaka <monaka@monami-ya.com>"
 USER root
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y libgtk-3-bin && \
+    apt-get clean && \
     rm -fr /var/lib/apt/lists/*
 COPY ./start-broadwayd.sh /start-broadwayd.sh
 USER user
