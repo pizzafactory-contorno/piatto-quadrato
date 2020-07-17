@@ -1,0 +1,19 @@
+FROM pizzafactory0contorno/piatto:debian-10.2
+LABEL maintainer="Masaki Muranaka <monaka@monami-ya.com>"
+
+USER root
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y apt-transport-https ca-certificates curl gnupg && \
+    curl https://xpra.org/repos/buster/xpra.list > /etc/apt/sources.list.d/xpra.list && \
+    curl https://xpra.org/gpg.asc | apt-key add - && \
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y python3-xpra websockify xpra xpra-html5 xvfb && \
+    apt-get autoremove -y curl gnupg && \
+    rm -fr /var/lib/apt/lists/*
+COPY ./start-xpra.sh /start-xpra.sh
+USER user
+
+ENV XPRA_ADDRESS="0.0.0.0" \
+    DISPLAY=":0"
+
+CMD [ "/start-xpra.sh" ]
