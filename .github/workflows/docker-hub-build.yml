@@ -21,7 +21,7 @@ jobs:
     # Runs a single command using the runners shell
     - name: Trigger automated-build
       env:
-        POST_TRIGGER_URL: ${{ secrets.DOCKERHUB_TRIGGER_URL }}
+        DOCKERHUB_TRIGGER_URL: ${{ secrets.DOCKERHUB_TRIGGER_URL }}
       run: |
         curl -H "Content-Type: application/json" --data '{"build": true}' -XPOST $DOCKERHUB_TRIGGER_URL
 
