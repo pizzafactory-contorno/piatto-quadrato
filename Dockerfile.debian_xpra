@@ -1,10 +1,12 @@
-FROM pizzafactory0contorno/piatto:debian-10.1
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
 LABEL maintainer="Masaki Muranaka <monaka@monami-ya.com>"
 
 USER root
 RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y apt-transport-https ca-certificates curl gnupg && \
-    curl https://xpra.org/repos/buster/xpra.list > /etc/apt/sources.list.d/xpra.list && \
+    apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release && \
+    update-ca-certificates --fresh && \
+    curl https://xpra.org/repos/$(lsb_release -cs)/xpra.list > /etc/apt/sources.list.d/xpra.list && \
     curl https://xpra.org/gpg.asc | apt-key add - && \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y websockify xpra xpra-html5 xvfb && \
