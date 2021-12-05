@@ -3,7 +3,8 @@ FROM ${BASE_IMAGE}
 LABEL maintainer="Masaki Muranaka <monaka@monami-ya.com>"
 
 USER root
-RUN apt-get update && apt-get upgrade -y && \
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update && apt-get upgrade -y && \
     apt-get install -y libgtk-3-bin && \
     rm -fr /var/lib/apt/lists/*
 COPY ./start-broadwayd.sh /start-broadwayd.sh
