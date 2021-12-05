@@ -1,4 +1,5 @@
-FROM pizzafactory0contorno/piatto:alpine-edge
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
 LABEL maintainer="Masaki Muranaka <monaka@monami-ya.com>"
 
 USER root
