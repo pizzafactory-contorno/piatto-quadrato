@@ -8,15 +8,19 @@ on:
       - 'main'
 
 jobs:
-  broadway:
+  docker:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        tag:
+        gui:
+          - broadway
+          - xpra
+        distro:
           - alpine
           - alpine-edge
           - alpine-3.15.0
-          - alpine-3.10 
+          - alpine-3.10
           - debian-11.1
           - debian-10.1
           - debian-10.2
@@ -25,117 +29,70 @@ jobs:
           - ubuntu-18.04
           - ubuntu-16.04
         include:
-          - tag: alpine
+          - distro: alpine
             dockerfile: Dockerfile.alpine
             platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - tag: alpine-edge
+          - distro: alpine-edge
             dockerfile: Dockerfile.alpine
             platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - tag: alpine-3.15.0
+          - distro: alpine-3.15.0
             dockerfile: Dockerfile.alpine
             platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - tag: alpine-3.10
+          - distro: alpine-3.10
             dockerfile: Dockerfile.alpine
             platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - tag: debian-11.1
+          - distro: debian-11.1
             dockerfile: Dockerfile.debian
             platforms: linux/386, linux/amd64, linux/arm/v7, linux/arm64/v8, linux/mips64le, linux/ppc64le, linux/s390x
-          - tag: debian-10.1
+          - distro: debian-10.1
             dockerfile: Dockerfile.debian
             platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - tag: debian-10.2
+          - distro: debian-10.2
             dockerfile: Dockerfile.debian
             platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - tag: debian-9.11
+          - distro: debian-9.11
             dockerfile: Dockerfile.debian
             platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - tag: ubuntu-20.04
-            dockerfile: Dockerfile.debian
+          - distro: ubuntu-20.04
+            dockerfile: Dockerfile.ubuntu
             platforms: linux/amd64, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
-          - tag: ubuntu-18.04
-            dockerfile: Dockerfile.debian
+          - distro: ubuntu-18.04
+            dockerfile: Dockerfile.ubuntu
             platforms: linux/386, linux/amd64, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - tag: ubuntu-16.04
-            extraPlatforms: riscv64
-            dockerfile: Dockerfile.debian
+          - distro: ubuntu-16.04
+            dockerfile: Dockerfile.ubuntu
             platforms: linux/386, linux/amd64, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      -
-        name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build (and push)
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          platforms: ${{ matrix.platforms }}
-          file: ${{ matrix.dockerfile }}_broadway
-          build-args: BASE_IMAGE=pizzafactory0contorno/piatto:${{ matrix.tag }}
-          push: ${{ github.event_name == 'push' }}
-          tags: pizzafactory0contorno/piatto-quadrato:${{ matrix.tag }}
-  xpra:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        tag:
-          - alpine
-          - alpine-edge
-          - alpine-3.15.0
-          # - alpine-3.10 # as no apk provided.
-          - debian-11.1
-          - debian-10.1
-          - debian-10.2
-          - debian-9.11
-          - ubuntu-20.04
-          - ubuntu-18.04
-          - ubuntu-16.04
-        include:
-          - tag: alpine
-            dockerfile: Dockerfile.alpine
-            platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - tag: alpine-edge
-            dockerfile: Dockerfile.alpine
-            platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - tag: alpine-3.15.0
-            dockerfile: Dockerfile.alpine
-            platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          # - tag: alpine-3.10
-          #   dockerfile: Dockerfile.alpine
-          #   platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - tag: debian-11.1
+          - distro: debian-11.1
+            gui: xpra
             dockerfile: Dockerfile.debian
             platforms: linux/386, linux/amd64
-          - tag: debian-10.1
+          - distro: debian-10.1
+            gui: xpra
             dockerfile: Dockerfile.debian
             platforms: linux/386, linux/amd64
-          - tag: debian-10.2
+          - distro: debian-10.2
+            gui: xpra
             dockerfile: Dockerfile.debian
             platforms: linux/386, linux/amd64
-          - tag: debian-9.11
+          - distro: debian-9.11
+            gui: xpra
             dockerfile: Dockerfile.debian
             platforms: linux/386, linux/amd64
-          - tag: ubuntu-20.04
+          - distro: ubuntu-20.04
+            gui: xpra
             dockerfile: Dockerfile.ubuntu
             platforms: linux/amd64
-          - tag: ubuntu-18.04
+          - distro: ubuntu-18.04
+            gui: xpra
             dockerfile: Dockerfile.ubuntu
             platforms: linux/386, linux/amd64
-          - tag: ubuntu-16.04
-            extraPlatforms: riscv64
+          - distro: ubuntu-16.04
+            gui: xpra
             dockerfile: Dockerfile.ubuntu
             platforms: linux/386, linux/amd64
+        exclude:
+          - gui: xpra
+            distro: alpine-3.10        # Not support `py3-xdg`.
     steps:
       -
         name: Checkout
@@ -158,7 +115,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           platforms: ${{ matrix.platforms }}
-          file: ${{ matrix.dockerfile }}_xpra
-          build-args: BASE_IMAGE=pizzafactory0contorno/piatto:${{ matrix.tag }}
+          file: ${{ matrix.dockerfile }}_${{ matrix.gui }}
+          build-args: BASE_IMAGE=pizzafactory0contorno/piatto:${{ matrix.distro }}
           push: ${{ github.event_name == 'push' }}
-          tags: pizzafactory0contorno/piatto-quadrato:${{ matrix.tag }}
+          tags: pizzafactory0contorno/piatto-quadrato:${{ matrix.distro }}_${{ matrix.gui }}
