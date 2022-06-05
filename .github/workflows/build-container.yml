@@ -13,109 +13,92 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gui:
-          - broadway
-          - xpra
-        distro:
+        tag:
           - alpine
-          - alpine-edge
           - alpine-3.15.0
           - alpine-3.10
+          - alpine-edge
           - debian-11.1
           - debian-10.1
           - debian-10.2
           - debian-9.11
-          - ubuntu-20.04
-          - ubuntu-18.04
           - ubuntu-16.04
+          - ubuntu-18.04
+          - ubuntu-20.04
+        screen:
+          - broadway
+          - xpra
         include:
-          - distro: alpine
+          - tag: alpine
             dockerfile: Dockerfile.alpine
+            baseImage: alpine:latest
             platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - distro: alpine-edge
+          - tag: alpine-3.15.0
             dockerfile: Dockerfile.alpine
+            baseImage: alpine:3.15.0
             platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - distro: alpine-3.15.0
+          - tag: alpine-3.10
             dockerfile: Dockerfile.alpine
+            baseImage: alpine:3.10
             platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - distro: alpine-3.10
+          - tag: alpine-edge
             dockerfile: Dockerfile.alpine
-            platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - distro: debian-11.1
+            baseImage: alpine:edge
+            platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
+          - tag: debian-11.1
             dockerfile: Dockerfile.debian
+            baseImage: debian:11.1-slim
             platforms: linux/386, linux/amd64, linux/arm/v7, linux/arm64/v8, linux/mips64le, linux/ppc64le, linux/s390x
-          - distro: debian-10.1
+          - tag: debian-10.1
             dockerfile: Dockerfile.debian
+            baseImage: debian:10.1-slim
             platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - distro: debian-10.2
+          - tag: debian-10.2
             dockerfile: Dockerfile.debian
+            baseImage: debian:10.2-slim
             platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - distro: debian-9.11
+          - tag: debian-9.11
             dockerfile: Dockerfile.debian
+            baseImage: debian:9.11-slim
             platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - distro: ubuntu-20.04
-            dockerfile: Dockerfile.ubuntu
-            platforms: linux/amd64, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
-          - distro: ubuntu-18.04
-            dockerfile: Dockerfile.ubuntu
+          - tag: ubuntu-16.04
+            dockerfile: Dockerfile.debian
+            baseImage: ubuntu:16.04
             platforms: linux/386, linux/amd64, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - distro: ubuntu-16.04
-            dockerfile: Dockerfile.ubuntu
+          - tag: ubuntu-18.04
+            dockerfile: Dockerfile.debian
+            baseImage: ubuntu:18.04
             platforms: linux/386, linux/amd64, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-          - distro: debian-11.1
-            gui: xpra
+          - tag: ubuntu-20.04
             dockerfile: Dockerfile.debian
-            platforms: linux/386, linux/amd64
-          - distro: debian-10.1
-            gui: xpra
-            dockerfile: Dockerfile.debian
-            platforms: linux/386, linux/amd64
-          - distro: debian-10.2
-            gui: xpra
-            dockerfile: Dockerfile.debian
-            platforms: linux/386, linux/amd64
-          - distro: debian-9.11
-            gui: xpra
-            dockerfile: Dockerfile.debian
-            platforms: linux/386, linux/amd64
-          - distro: ubuntu-20.04
-            gui: xpra
-            dockerfile: Dockerfile.ubuntu
-            platforms: linux/amd64
-          - distro: ubuntu-18.04
-            gui: xpra
-            dockerfile: Dockerfile.ubuntu
-            platforms: linux/386, linux/amd64
-          - distro: ubuntu-16.04
-            gui: xpra
-            dockerfile: Dockerfile.ubuntu
-            platforms: linux/386, linux/amd64
+            baseImage: ubuntu:20.04
+            platforms: linux/amd64, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
         exclude:
-          - gui: xpra
-            distro: alpine-3.10        # Not support `py3-xdg`.
+          - tag: alpine-3.10
+            screen: xpra
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       -
         name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+        uses: docker/setup-qemu-action@v2
       -
         name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
       -
         name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build (and push)
+        name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           platforms: ${{ matrix.platforms }}
-          file: ${{ matrix.dockerfile }}_${{ matrix.gui }}
-          build-args: BASE_IMAGE=pizzafactory0contorno/piatto:${{ matrix.distro }}
+          file: ${{ matrix.dockerfile }}_${{ matrix.screen }}
+          build-args: BASE_IMAGE=${{ matrix.baseImage }}
           push: ${{ github.event_name == 'push' }}
-          tags: pizzafactory0contorno/piatto-quadrato:${{ matrix.distro }}_${{ matrix.gui }}
+          tags: pizzafactory0contorno/piatto:${{ matrix.tag }}_${{ matrix.screen }}
