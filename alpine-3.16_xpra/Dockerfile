@@ -1,5 +1,4 @@
-ARG BASE_IMAGE
-FROM ${BASE_IMAGE}
+FROM docker.io/pizzafactory0contorno/piatto:alpine-3.16@sha256:98492a2cadecf1aa681272ef9c8946378c83ab8775fd018bc296417f7b5b286f
 LABEL maintainer="Masaki Muranaka <monaka@monami-ya.com>"
 
 USER root
