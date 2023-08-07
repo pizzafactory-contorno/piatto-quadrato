@@ -97,6 +97,8 @@ jobs:
           - distro: ubuntu-16.04
             screen: xpra
     steps:
+      - id: repository
+        run: echo "name=${GITHUB_REPOSITORY#${GITHUB_REPOSITORY_OWNER}/}" >> $GITHUB_OUTPUT
       -
         name: Checkout
         uses: actions/checkout@v3
@@ -120,6 +122,6 @@ jobs:
           platforms: ${{ matrix.platforms }}
           file: ${{ matrix.distro }}_${{ matrix.screen }}/Dockerfile
           push: ${{ github.event_name == 'push' }}
-          tags: pizzafactory0contorno/piatto:${{ matrix.distro }}_${{ matrix.screen }}
+          tags: pizzafactory0contorno/${{ steps.repository.outputs.name }}:${{ matrix.distro }}_${{ matrix.screen }}
           cache-from: type=gha
           cache-to: type=gha,mode=max,scope=${{ matrix.distro }}-${{ matrix.screen }}
