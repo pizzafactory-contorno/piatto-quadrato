@@ -76,9 +76,6 @@ jobs:
           - distro: ubuntu-18.04
             platforms: linux/386, linux/amd64, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
             screen: broadway
-          - distro: ubuntu-18.04
-            platforms: linux/amd64
-            screen: xpra
           - distro: ubuntu-20.04
             platforms: linux/amd64, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
             screen: broadway
@@ -95,6 +92,8 @@ jobs:
           - distro: alpine-3.10
             screen: xpra
           - distro: ubuntu-16.04
+            screen: xpra
+          - distro: ubuntu-18.04
             screen: xpra
     steps:
       - id: repository
