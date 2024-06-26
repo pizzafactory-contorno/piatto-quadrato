@@ -6,7 +6,7 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release && \
     update-ca-certificates --fresh && \
-    curl https://xpra.org/repos/$(lsb_release -cs)/xpra.sources > /etc/apt/sources.list.d/xpra.sources && \
+    curl https://raw.githubusercontent.com/Xpra-org/xpra/master/packaging/repos/bullseye/xpra.sources > /etc/apt/sources.list.d/xpra.sources && \
     curl -fsSL https://xpra.org/xpra.asc -o /usr/share/keyrings/xpra.asc && \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y websockify xpra xpra-html5 xvfb && \
