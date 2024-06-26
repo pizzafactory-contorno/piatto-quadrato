@@ -34,8 +34,6 @@ jobs:
           - alpine-3.10
           - alpine-edge
           - debian-11.1
-          - debian-10.1
-          - debian-10.2
           - ubuntu-16.04
           - ubuntu-18.04
           - ubuntu-20.04
@@ -52,18 +50,6 @@ jobs:
             platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
           - distro: alpine-edge
             platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/riscv64, linux/s390x
-          - distro: debian-10.1
-            platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-            screen: broadway
-          - distro: debian-10.1
-            platforms: linux/amd64
-            screen: xpra
-          - distro: debian-10.2
-            platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64/v8, linux/ppc64le, linux/s390x
-            screen: broadway
-          - distro: debian-10.2
-            platforms: linux/amd64
-            screen: xpra
           - distro: debian-11.1
             platforms: linux/386, linux/amd64, linux/arm/v7, linux/arm64/v8, linux/mips64le, linux/ppc64le, linux/s390x
             screen: broadway
