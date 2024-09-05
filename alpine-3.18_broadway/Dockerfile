@@ -1,4 +1,4 @@
-FROM docker.io/pizzafactory0contorno/piatto:alpine-3.18@sha256:ba5a697c5f148419a19730c9585da097cf2ae08fcfe5a36ea3c68f9ed9ec704d
+FROM docker.io/pizzafactory0contorno/piatto:alpine-3.18@sha256:b539b5599c11db38186cbe3ec567b7b4e5e5b931f8d8b844c9562465e56acd24
 LABEL maintainer="Masaki Muranaka <monaka@monami-ya.com>"
 
 USER root
