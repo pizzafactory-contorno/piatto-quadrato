@@ -1,4 +1,4 @@
-FROM docker.io/pizzafactory0contorno/piatto:ubuntu-20.04@sha256:d845a9998779143f382d1e6875e07fca559cdbac42002e438ee7a57d91b35644
+FROM docker.io/pizzafactory0contorno/piatto:ubuntu-20.04@sha256:309d5c89c93c481d5e3a939a0eebab81f1bc1d5d09aacae7b08668a2d67adadb
 LABEL maintainer="Masaki Muranaka <monaka@monami-ya.com>"
 
 USER root
